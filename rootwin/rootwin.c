@@ -101,7 +101,7 @@ int main(int argc, char** argv)
 			READTMP("/sys/class/power_supply/BAT0/energy_full");
 			double full = strtod(tmp, NULL);
 
-			int pct = (int)round((full / now) * 100.0);
+			int pct = (int)round((now / full) * 100.0);
 			BUFN("B:%d%%", pct);
 
 		}
