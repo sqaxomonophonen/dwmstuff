@@ -1,0 +1,11 @@
+--- config.def.h	2015-11-28 13:02:09.926302479 +0100
++++ config.h	2015-11-28 14:48:34.384490560 +0100
+@@ -5,7 +5,7 @@
+  *
+  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
+  */
+-static char font[] = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
++static char font[] = "Terminus:pixelsize=18";
+ static int borderpx = 2;
+ 
+ /*
