@@ -65,7 +65,8 @@ int main(int argc, char** argv)
 		XClearWindow(dpy, root);
 	}
 
-	for (;;sleep(1)) {
+	int i = 0;
+	for (;;sleep(1),i++) {
 		char buf[SZ];
 		char* bufptr = buf;
 		size_t buf_remaining = SZ;
@@ -102,7 +103,11 @@ int main(int argc, char** argv)
 			double full = strtod(tmp, NULL);
 
 			int pct = (int)round((now / full) * 100.0);
-			BUFN("B:%d%%", pct);
+			if (pct < 10 && i&1) {
+				BUFN("    ");
+			} else {
+				BUFN("B:%d%%", pct);
+			}
 
 		}
 
