@@ -74,21 +74,6 @@ int main(int argc, char** argv)
 		char tmp[SZ];
 
 		{
-			time_t t = time(NULL);
-			struct tm* tm = localtime(&t);
-			if (tm == NULL) {
-				perror("localtime");
-				exit(1);
-			}
-
-			strftime(tmp, sizeof(tmp), "%F %T", tm);
-
-			BUFN("%s", tmp);
-		}
-
-		SEPARATOR;
-
-		{
 			READTMP("/proc/loadavg");
 			BUFN("%s", tmp);
 		}
@@ -109,6 +94,21 @@ int main(int argc, char** argv)
 				BUFN("B:%d%%", pct);
 			}
 
+		}
+
+		SEPARATOR;
+
+		{
+			time_t t = time(NULL);
+			struct tm* tm = localtime(&t);
+			if (tm == NULL) {
+				perror("localtime");
+				exit(1);
+			}
+
+			strftime(tmp, sizeof(tmp), "%F %T", tm);
+
+			BUFN("%s", tmp);
 		}
 
 		XStoreName(dpy, root, buf);
