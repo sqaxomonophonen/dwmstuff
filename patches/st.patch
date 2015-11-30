@@ -1,5 +1,5 @@
 --- config.def.h	2015-11-28 13:02:09.926302479 +0100
-+++ config.h	2015-11-28 14:48:34.384490560 +0100
++++ config.h	2015-11-30 09:22:18.218708568 +0100
 @@ -5,7 +5,7 @@
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
@@ -9,3 +9,12 @@
  static int borderpx = 2;
  
  /*
+@@ -74,7 +74,7 @@ static const char *colorname[] = {
+ 	"red3",
+ 	"green3",
+ 	"yellow3",
+-	"blue2",
++	"#1930ea",
+ 	"magenta3",
+ 	"cyan3",
+ 	"gray90",
