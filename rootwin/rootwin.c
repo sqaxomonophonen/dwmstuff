@@ -27,13 +27,14 @@
 		FILE* f = fopen(path, "r"); \
 		if (f == NULL) { \
 			snprintf(tmp, SZ, "FOPEN ERR"); \
-		} \
-		size_t r = fread(tmp, 1, SZ-1, f); \
-		fclose(f); \
-		if (r < 1) { \
-			snprintf(tmp, SZ, "FREAD ERR"); \
 		} else { \
-			tmp[r-1] = 0; \
+			size_t r = fread(tmp, 1, SZ-1, f); \
+			fclose(f); \
+			if (r < 1) { \
+				snprintf(tmp, SZ, "FREAD ERR"); \
+			} else { \
+				tmp[r-1] = 0; \
+			} \
 		} \
 	}
 
