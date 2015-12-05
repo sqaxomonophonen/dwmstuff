@@ -26,12 +26,12 @@
 	{ \
 		FILE* f = fopen(path, "r"); \
 		if (f == NULL) { \
-			snprintf(tmp, SZ, "FOPEN ERR"); \
+			continue; \
 		} else { \
 			size_t r = fread(tmp, 1, SZ-1, f); \
 			fclose(f); \
 			if (r < 1) { \
-				snprintf(tmp, SZ, "FREAD ERR"); \
+				continue; \
 			} else { \
 				tmp[r-1] = 0; \
 			} \
