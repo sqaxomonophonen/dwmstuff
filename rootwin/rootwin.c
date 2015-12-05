@@ -26,16 +26,15 @@
 	{ \
 		FILE* f = fopen(path, "r"); \
 		if (f == NULL) { \
-			perror(path); \
-			exit(1); \
+			snprintf(tmp, SZ, "FOPEN ERR"); \
 		} \
 		size_t r = fread(tmp, 1, SZ-1, f); \
 		fclose(f); \
 		if (r < 1) { \
-			fprintf(stderr, "%s is empty", path); \
-			exit(1); \
+			snprintf(tmp, SZ, "FREAD ERR"); \
+		} else { \
+			tmp[r-1] = 0; \
 		} \
-		tmp[r-1] = 0; \
 	}
 
 int main(int argc, char** argv)
