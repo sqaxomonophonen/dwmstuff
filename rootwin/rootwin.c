@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <math.h>
+#include <sys/select.h>
 
 #include <X11/Xlib.h>
 
@@ -38,6 +39,16 @@
 		} \
 	}
 
+#define BATFIX "/sys/class/power_supply/BAT0/"
+
+static void mysleep()
+{
+	struct timeval timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 500000;
+	select(0, NULL, NULL, NULL, &timeout);
+}
+
 int main(int argc, char** argv)
 {
 	Display* dpy;
@@ -66,7 +77,7 @@ int main(int argc, char** argv)
 	}
 
 	int i = 0;
-	for (;;sleep(1),i++) {
+	for (;;i++) {
 		char buf[SZ];
 		char* bufptr = buf;
 		size_t buf_remaining = SZ;
@@ -81,19 +92,32 @@ int main(int argc, char** argv)
 		SEPARATOR;
 
 		{
-			READTMP("/sys/class/power_supply/BAT0/energy_now");
+			READTMP(BATFIX "energy_now");
 			double now = strtod(tmp, NULL);
 
-			READTMP("/sys/class/power_supply/BAT0/energy_full");
+			READTMP(BATFIX "energy_full");
 			double full = strtod(tmp, NULL);
 
 			int pct = (int)round((now / full) * 100.0);
+
+			READTMP(BATFIX "status");
+			int charging = strcmp(tmp, "Charging") == 0;
+			int discharging = strcmp(tmp, "Discharging") == 0;
+
+			char sep;
+			if (discharging) {
+				sep = '-';
+			} else if (charging && pct < 90) {
+				sep = '+';
+			} else {
+				sep = ':';
+			}
+
 			if (pct < 10 && i&1) {
 				BUFN("    ");
 			} else {
-				BUFN("B:%d%%", pct);
+				BUFN("B%c%d%%", sep, pct);
 			}
-
 		}
 
 		SEPARATOR;
@@ -113,6 +137,8 @@ int main(int argc, char** argv)
 
 		XStoreName(dpy, root, buf);
 		XSync(dpy, False);
+
+		mysleep();
 	}
 
 	XCloseDisplay(dpy);
