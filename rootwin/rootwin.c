@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 				sep = ':';
 			}
 
-			if (pct < 10 && i&1) {
+			if (pct < 10 && i&1 && discharging) {
 				BUFN("    ");
 			} else {
 				BUFN("B%c%d%%", sep, pct);
