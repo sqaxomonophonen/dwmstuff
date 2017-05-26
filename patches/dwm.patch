@@ -1,36 +1,28 @@
---- config.def.h	2015-11-28 12:09:18.051385224 +0100
-+++ config.h	2015-11-29 11:02:02.022842464 +0100
-@@ -2,9 +2,9 @@
- 
- /* appearance */
- static const char *fonts[] = {
--	"monospace:size=10"
-+	"Terminus:size=12"
- };
--static const char dmenufont[]       = "monospace:size=10";
-+static const char dmenufont[]       = "Terminus:size=12";
- static const char normbordercolor[] = "#444444";
- static const char normbgcolor[]     = "#222222";
- static const char normfgcolor[]     = "#bbbbbb";
-@@ -14,7 +14,7 @@ static const char selfgcolor[]      = "#
+--- config.def.h	2017-05-25 16:53:52.603395908 +0200
++++ config.h	2017-05-26 02:18:06.616711277 +0200
+@@ -4,9 +4,9 @@
  static const unsigned int borderpx  = 1;        /* border pixel of windows */
  static const unsigned int snap      = 32;       /* snap pixel */
  static const int showbar            = 1;        /* 0 means no bar */
 -static const int topbar             = 1;        /* 0 means bottom bar */
+-static const char *fonts[]          = { "monospace:size=10" };
+-static const char dmenufont[]       = "monospace:size=10";
 +static const int topbar             = 0;        /* 0 means bottom bar */
- 
- /* tagging */
- static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-@@ -42,7 +42,7 @@ static const Layout layouts[] = {
++static const char *fonts[]          = { "xos4 Terminus:size=12" };
++static const char dmenufont[]       = "xos4 Terminus:size=12";
+ static const char col_gray1[]       = "#222222";
+ static const char col_gray2[]       = "#444444";
+ static const char col_gray3[]       = "#bbbbbb";
+@@ -44,7 +44,7 @@
  };
  
  /* key definitions */
 -#define MODKEY Mod1Mask
-+#define MODKEY Mod4Mask /* OS key */
++#define MODKEY Mod4Mask /* OS Key */
  #define TAGKEYS(KEY,TAG) \
  	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
  	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-@@ -80,6 +80,8 @@ static Key keys[] = {
+@@ -82,6 +82,8 @@
  	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
  	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
  	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
@@ -40,10 +32,10 @@
  	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
  	TAGKEYS(                        XK_1,                      0)
 diff --git a/dwm.1 b/dwm.1
-index 6687011..40f4e1e 100644
+index e3b2c38..7d9f463 100644
 --- a/dwm.1
 +++ b/dwm.1
-@@ -71,6 +71,12 @@ Send focused window to previous screen, if any.
+@@ -77,6 +77,12 @@ Send focused window to previous screen, if any.
  .B Mod1\-Shift\-.
  Send focused window to next screen, if any.
  .TP
@@ -57,10 +49,10 @@ index 6687011..40f4e1e 100644
  Toggles bar on and off.
  .TP
 diff --git a/dwm.c b/dwm.c
-index 0362114..2cc7a56 100644
+index a5ce993..740d9ad 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -227,6 +227,8 @@ static void updatewindowtype(Client *c);
+@@ -228,6 +228,8 @@ static void updatewindowtype(Client *c);
  static void updatetitle(Client *c);
  static void updatewmhints(Client *c);
  static void view(const Arg *arg);
@@ -69,7 +61,7 @@ index 0362114..2cc7a56 100644
  static Client *wintoclient(Window w);
  static Monitor *wintomon(Window w);
  static int xerror(Display *dpy, XErrorEvent *ee);
-@@ -2040,6 +2042,29 @@ view(const Arg *arg)
+@@ -2045,6 +2047,29 @@ view(const Arg *arg)
  	arrange(selmon);
  }
  

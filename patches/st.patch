@@ -1,15 +1,15 @@
---- config.def.h	2015-11-28 13:02:09.926302479 +0100
-+++ config.h	2015-11-30 09:22:18.218708568 +0100
+--- config.def.h	2017-05-25 17:04:18.160071857 +0200
++++ config.h	2017-05-25 17:39:10.380188537 +0200
 @@ -5,7 +5,7 @@
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
   */
--static char font[] = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
-+static char font[] = "Terminus:pixelsize=18";
- static int borderpx = 2;
+-char font[] = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
++char font[] = "-xos4-terminus-medium-*-*-*-18-*-*-*-*-*-*-*";
+ int borderpx = 2;
  
  /*
-@@ -74,7 +74,7 @@ static const char *colorname[] = {
+@@ -89,7 +89,7 @@
  	"red3",
  	"green3",
  	"yellow3",
