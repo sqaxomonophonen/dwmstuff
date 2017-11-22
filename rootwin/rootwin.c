@@ -39,7 +39,7 @@
 		} \
 	}
 
-#define BATFIX "/sys/class/power_supply/BAT0/"
+#define PSFIX "/sys/class/power_supply/"
 
 static void mysleep()
 {
@@ -92,17 +92,17 @@ int main(int argc, char** argv)
 		SEPARATOR;
 
 		{
-			READTMP(BATFIX "energy_now");
+			READTMP(PSFIX "BAT0/energy_now");
 			double now = strtod(tmp, NULL);
 
-			READTMP(BATFIX "energy_full");
+			READTMP(PSFIX "BAT0/energy_full");
 			double full = strtod(tmp, NULL);
 
 			int pct = (int)round((now / full) * 100.0);
 
-			READTMP(BATFIX "status");
-			int charging = strcmp(tmp, "Charging") == 0;
-			int discharging = strcmp(tmp, "Discharging") == 0;
+			READTMP(PSFIX "AC/online");
+			int charging = strcmp(tmp, "1") == 0;
+			int discharging = !charging;
 
 			char sep;
 			if (discharging) {
