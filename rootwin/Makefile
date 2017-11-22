@@ -1,7 +1,7 @@
 all: rootwin
 
 rootwin: rootwin.c
-	$(CC) -g -O0 -lm -lX11 rootwin.c -o rootwin
+	$(CC) -g -O0 rootwin.c -o rootwin -lX11 -lm
 
 install:
 	install rootwin /usr/local/bin/rootwin
