@@ -1,0 +1,16 @@
+See st's FAQ: it's due to a bug in Xft (recently fixed as of November 2019, but
+it might take som time to become the "newest stable"). They offer an "ugly
+solution" like this:
+
+diff --git a/x.c b/x.c
+index bc3ad5a..c336d18 100644
+--- a/x.c
++++ b/x.c
+@@ -1257,6 +1257,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
+ 			FcPatternAddCharSet(fcpattern, FC_CHARSET,
+ 					fccharset);
+ 			FcPatternAddBool(fcpattern, FC_SCALABLE, 1);
++			FcPatternAddBool(fcpattern, FC_COLOR, FcFalse); // fix for color-emoji crash?
+ 
+ 			FcConfigSubstitute(0, fcpattern,
+ 					FcMatchPattern);
