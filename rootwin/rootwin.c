@@ -7,6 +7,7 @@
 #include <sys/select.h>
 
 #include <X11/Xlib.h>
+#include <X11/XF86keysym.h>
 
 #define SZ (1<<12)
 
@@ -45,7 +46,7 @@ static void mysleep()
 {
 	struct timeval timeout;
 	timeout.tv_sec = 0;
-	timeout.tv_usec = 500000;
+	timeout.tv_usec = 100000;
 	select(0, NULL, NULL, NULL, &timeout);
 }
 
@@ -75,6 +76,10 @@ int main(int argc, char** argv)
 		XSetWindowBackground(dpy, root, color.pixel);
 		XClearWindow(dpy, root);
 	}
+
+	XSelectInput(dpy, root, KeyPressMask);
+	XGrabKey(dpy, XKeysymToKeycode(dpy, XF86XK_MonBrightnessDown), 0, root, False, GrabModeAsync, GrabModeAsync);
+	XGrabKey(dpy, XKeysymToKeycode(dpy, XF86XK_MonBrightnessUp), 0, root, False, GrabModeAsync, GrabModeAsync);
 
 	int i = 0;
 	for (;;i++) {
@@ -133,6 +138,49 @@ int main(int argc, char** argv)
 			strftime(tmp, sizeof(tmp), "%F %T", tm);
 
 			BUFN("%s", tmp);
+		}
+
+		while (XPending(dpy)) {
+			XEvent ev;
+			XNextEvent(dpy, &ev);
+			KeySym sym;
+			double brightness_delta = 0;
+			switch (ev.type) {
+			case KeyPress:
+				sym = XLookupKeysym(&ev.xkey, 0);
+				if (sym == XF86XK_MonBrightnessDown) {
+					brightness_delta = -1;
+				} else if (sym == XF86XK_MonBrightnessUp) {
+					brightness_delta = 1;
+				}
+				break;
+			}
+
+			if (brightness_delta != 0) {
+				READTMP("/sys/class/backlight/intel_backlight/max_brightness");
+				double max_brightness = strtod(tmp, NULL);
+
+				const char* brightness_path = "/sys/class/backlight/intel_backlight/brightness";
+				READTMP(brightness_path);
+				double brightness = strtod(tmp, NULL);
+
+				const double power = 2.4;
+				const double step = 0.015;
+
+				double new_brightness = pow(pow(brightness / max_brightness, 1/power) + brightness_delta*step, power) * max_brightness;
+				if (new_brightness > max_brightness) new_brightness = max_brightness;
+				if (!isfinite(new_brightness)) new_brightness = 0;
+				if (new_brightness < 1) new_brightness = 1;
+
+				FILE* f = fopen(brightness_path, "w");
+				if (f != NULL) {
+					//printf("%d -> %s\n", (int)new_brightness, brightness_path);
+					fprintf(f, "%d\n", (int)new_brightness);
+					fclose(f);
+				} else {
+					fprintf(stderr, "%s: could not write\n", brightness_path);
+				}
+			}
 		}
 
 		XStoreName(dpy, root, buf);
